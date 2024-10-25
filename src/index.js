@@ -18,6 +18,8 @@ app.use('/insert', insertRouter);
 
 
 
+
+
 app.listen(8080, () => {
   console.log(`Server running on port ${8080}, environment: ${process.env.DB_PORT}`);
 });
