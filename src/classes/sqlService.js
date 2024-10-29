@@ -26,7 +26,11 @@ class SQLService {
         });
 
         this.insertAtachmentQuery = 'INSERT INTO wp_posts (post_title, post_content, post_excerpt, to_ping, pinged, post_content_filtered, post_parent, post_status, post_type, post_date, post_name, post_author, guid, post_mime_type) VALUES (?, ?, ?, ?, ?, ?, ?, "inherit", "attachment", ?, ?, ?, ?, ?)';
+        this.metaQuery = `INSERT INTO wp_postmeta (post_id, meta_key, meta_value) VALUES (?, '_wp_attachment_metadata', ?)`;
         this.insertPostQuery = 'INSERT INTO wp_posts (post_title, post_content, post_excerpt, to_ping, pinged, post_content_filtered, post_parent, post_status, post_type, post_date, post_name, post_author) VALUES (?, ?, ?, ?, ?, ?, ?, "publish", "post", ?, ?, 1)';
+        this.connectionImageQuery = `INSERT INTO wp_postmeta (post_id, meta_key, meta_value) VALUES (?, '_wp_attached_file', ?)`;
+        this.featuredImageQuery = `INSERT INTO wp_postmeta (post_id, meta_key, meta_value) VALUES (?, '_thumbnail_id', ?)`;
+
     }
 
     async testConnection() {
@@ -175,7 +179,7 @@ class SQLService {
                 }
         
                 // Insertar metadatos en wp_postmeta
-                const metaQuery = `INSERT INTO wp_postmeta (post_id, meta_key, meta_value) VALUES (?, '_wp_attachment_metadata', ?)`;
+                
                 const metadataWithFile = {
                     file: relativeImagePath,
                     sizes: metadata.sizes,
@@ -195,7 +199,7 @@ class SQLService {
                     }
                 };
         
-                this.db.query(metaQuery, [attachmentId, JSON.stringify(metadataWithFile)], (err) => {
+                this.db.query(this.metaQuery, [attachmentId, JSON.stringify(metadataWithFile)], (err) => {
                     if (err) {
                         console.error('Error inserting metadata for attachment:', err);
                     } else {
@@ -204,8 +208,8 @@ class SQLService {
                 });
         
                 // Asignar la imagen como portada del post
-                const featuredImageQuery = `INSERT INTO wp_postmeta (post_id, meta_key, meta_value) VALUES (?, '_thumbnail_id', ?)`;
-                this.db.query(featuredImageQuery, [postId, attachmentId], (err) => {
+                
+                this.db.query(this.featuredImageQuery, [postId, attachmentId], (err) => {
                     if (err) {
                         console.error('Error setting featured image:', err);
                     } else {
@@ -214,8 +218,8 @@ class SQLService {
                 });
         
                 // Insertar el `_wp_attached_file` con la ruta relativa
-                const connectionImageQuery = `INSERT INTO wp_postmeta (post_id, meta_key, meta_value) VALUES (?, '_wp_attached_file', ?)`;
-                this.db.query(connectionImageQuery, [attachmentId, relativeImagePath], (err) => {
+                
+                this.db.query(this.connectionImageQuery, [attachmentId, relativeImagePath], (err) => {
                     if (err) {
                         console.error('Error inserting _wp_attached_file:', err);
                     } else {
