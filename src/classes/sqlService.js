@@ -42,7 +42,7 @@ class SQLService {
     }
 
 
-        async insertMasivo() {
+    async insertMasivo() {
             try {
                 const response = await axios.get('https://rickandmortyapi.com/api/character');
                 const characters = response.data.results
@@ -57,7 +57,7 @@ class SQLService {
                             const postName = data.postName;
                     
                             await this.insertAttachment(idPost, imageUrl, imagePath, postName);
-                            console.log('terminado');
+                            await this.setCategoria(idPost, 1);
                         } else {
                             console.error('Error: insertNota no retornó datos válidos');
                         }}
@@ -70,10 +70,10 @@ class SQLService {
             } catch (error) {
                 console.error('Error fetching characters:', error);
             }
-        }
+    }
 
 
-        async downloadImage( imageUrl, imagePath) {
+    async downloadImage( imageUrl, imagePath) {
             const writer = fs.createWriteStream(imagePath);
             const response = await axios({
                 url: imageUrl,
@@ -88,10 +88,10 @@ class SQLService {
                 writer.on('finish', resolve);
                 writer.on('error', reject);
             });
-        };
+    };
 
        
-        async insertAttachment(postId, imageUrl, originalImagePath, postName) {
+    async insertAttachment(postId, imageUrl, originalImagePath, postName) {
             const title = 'Attachment title';
             const content = 'Attachment content';
             const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -101,11 +101,12 @@ class SQLService {
             const sizes = [
                 { width: 150, height: 150 },
                 { width: 200, height: 165 },
-                { width: 300, height: 300 },
+                { width: 300, height: 200 },
                 { width: 554, height: 346 },
-                { width: 554, height: 554 },
-                { width: 768, height: 768 },
-                { width: 1024, height: 640 }
+                { width: 554, height: 369 },
+                { width: 768, height: 512 },
+                { width: 1024, height: 683 },
+                { width: 1140, height: 640 }
             ];
         
             const uploadDir = path.join(`C:/Users/Matias/Local Sites/prueba-del-famoso-tomi/app/public/wp-content/uploads/${year}/${month}`);
@@ -158,6 +159,16 @@ class SQLService {
                             height: dimensions.height,
                             mime_type: `image/${extension.replace('.', '')}`
                         };
+
+                        const sizePostQuery = this.insertAtachmentQuery;
+                        this.db.query(sizePostQuery, ['', '', '', '', '', '', attachmentId, currentDate, `${postName}-${sizeName}`, 1, sizeGuid, `image/${extension}`], (err, result) => {
+                            if (err) {
+                                console.error(`Error inserting ${sizeName} attachment:`, err);
+                                return;
+                            }
+                            console.log(`${sizeName} attachment inserted successfully:`, result);
+                        });
+
                     } catch (error) {
                         console.error(`Error processing ${sizeName} image:`, error);
                     }
@@ -212,20 +223,19 @@ class SQLService {
                     }
                 });
             });
-        }
-        
-        
-        
+    }
+    
+    
+    
 
-        async insertNota(character) {
+    async insertNota(character) {
             const title = character.name;
             const content = `
                 <!-- wp:paragraph -->
-                <p>${character.status} - ${character.species}</p>
-                <!-- /wp:paragraph -->
-                <!-- wp:paragraph -->
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent non leo vestibulum, condimentum elit non, venenatis eros.</p>
                 <!-- /wp:paragraph -->`;
+
+            const excert = `${character.status} - ${character.species}`;    
             const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
             const postName = title.replace(/\s+/g, '-').toLowerCase();
             const year = new Date().getFullYear();
@@ -235,7 +245,7 @@ class SQLService {
                 const query = this.insertPostQuery;
                 
                 // Inserta la publicación en la base de datos
-                this.db.query(query, [title, content, '', '', '', '', 0, currentDate, postName, 1], async (err, result) => {
+                this.db.query(query, [title, content, excert, '', '', '', 0, currentDate, postName, 1], async (err, result) => {
                     if (err) {
                         console.error('Error inserting data:', err);
                         reject(err);
@@ -268,9 +278,43 @@ class SQLService {
                     });
                 });
             });
-        }
+    }
         
-        
+    async createCategoria(categoryName,) {
+        const termInsertQuery = 'INSERT INTO wp_terms (name, slug) VALUES (?, ?)';
+        this.db.query(termInsertQuery, [categoryName, categoryName.toLowerCase().replace(/\s+/g, '-')], (err, result) => {
+            if (err) {
+                console.error('Error inserting term:', err);
+                return;
+            }
+            const termId = result.insertId; // Obtener el ID del término insertado
+
+            // 2. Insertar la taxonomía en wp_term_taxonomy
+            const taxonomyInsertQuery = 'INSERT INTO wp_term_taxonomy (term_id, taxonomy) VALUES (?, ?)';
+            this.db.query(taxonomyInsertQuery, [termId, 'category'], (err, result) => {
+                if (err) {
+                    console.error('Error inserting term taxonomy:', err);
+                    return;
+                }
+                const termTaxonomyId = result.insertId; // Obtener el ID de la taxonomía
+
+               
+            });
+        });
+    } 
+
+    async setCategoria(postId, categoriaId) {
+         const relationshipInsertQuery = 'INSERT INTO wp_term_relationships (object_id, term_taxonomy_id) VALUES (?, ?)';
+         this.db.query(relationshipInsertQuery, [postId, categoriaId], (err, result) => {
+             if (err) {
+                 console.error('Error inserting term relationship:', err);
+                 return;
+             }
+             console.log('Post associated with category successfully');
+         });
+           
+    }
+
 
 }
 
