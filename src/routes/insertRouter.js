@@ -1,9 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { insertMasivo, TESTCONNECTION } = require('../controllers/insertController');
+const { 
+    insertController
+ 
+ } = require('../controllers');
 
-router.get('/', TESTCONNECTION );
-router.get('/insertMasivo', insertMasivo);
+
+router.post('/postMasivos', insertController.insertMasivo);
+
 
 module.exports = router;
 

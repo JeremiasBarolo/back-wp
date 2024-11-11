@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 require('dotenv').config(); 
 
+app.use(express.json());
+
 
 // routes
 const { 
@@ -9,7 +11,9 @@ const {
 
 } = require('./routes')
 
+
 app.use('/insert', insertRouter);
+
 
 
 
