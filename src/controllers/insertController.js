@@ -1,5 +1,5 @@
-const SQLService = require('../classes/sqlService');
-const sqlService = new SQLService();
+const { sqlService } = require('../classes/sqlService');
+
 
 
 const insertMasivo = async (req, res) => {

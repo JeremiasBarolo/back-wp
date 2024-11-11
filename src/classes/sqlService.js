@@ -62,6 +62,7 @@ class SQLService {
                     
                             await this.insertAttachment(idPost, imageUrl, imagePath, postName);
                             await this.setCategoria(idPost, 1);
+                            
                         } else {
                             console.error('Error: insertNota no retornó datos válidos');
                         }}
@@ -77,160 +78,27 @@ class SQLService {
     }
 
 
-    async downloadImage( imageUrl, imagePath) {
-            const writer = fs.createWriteStream(imagePath);
-            const response = await axios({
-                url: imageUrl,
-                method: 'GET',
-                responseType: 'stream',
-                timeout: 10000, 
-            });
-
-            response.data.pipe(writer);
-
-            return new Promise((resolve, reject) => {
-                writer.on('finish', resolve);
-                writer.on('error', reject);
-            });
-    };
-
-       
-    async insertAttachment(postId, imageUrl, originalImagePath, postName) {
-            const title = 'Attachment title';
-            const content = 'Attachment content';
-            const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
-            const year = new Date().getFullYear();
-            const month = (`0${new Date().getMonth() + 1}`).slice(-2);
-        
-            const sizes = [
-                { width: 150, height: 150 },
-                { width: 200, height: 165 },
-                { width: 300, height: 200 },
-                { width: 554, height: 346 },
-                { width: 554, height: 369 },
-                { width: 768, height: 512 },
-                { width: 1024, height: 683 },
-                { width: 1140, height: 640 }
-            ];
-        
-            const uploadDir = path.join(`C:/Users/Matias/Local Sites/prueba-del-famoso-tomi/app/public/wp-content/uploads/${year}/${month}`);
-            mkdirp.sync(uploadDir);
-            if (!fs.existsSync(uploadDir)) {
-                fs.mkdirSync(uploadDir, { recursive: true });
-            }
-        
-            // Obtener la extensión de la URL de la imagen
-            const extension = path.extname(imageUrl).split('.').pop(); 
-
-            const originalGuid = `http://localhost:10010/wp-content/uploads/${year}/${month}/${postName}.${extension}`;
-            const relativeImagePath = `${year}/${month}/${postName}.${extension}`;
-        
-            // Descargar imagen original
-            await this.downloadImage(imageUrl, originalImagePath);
-        
-            // Insertar imagen original en la base de datos
-            const originalPostQuery = this.insertAtachmentQuery;
-            this.db.query(originalPostQuery, ['', '', '', '', '', '', postId, currentDate, postName, 1, originalGuid, `image/${extension}`], async (err, result) => {
-                if (err) {
-                    console.error('Error inserting original attachment:', err);
-                    return;
-                }
-        
-                const attachmentId = result.insertId;
-                console.log('Original attachment inserted successfully:', result);
-        
-                const metadata = { sizes: {} };
-        
-                const extension = path.extname(originalImagePath); 
-                const baseName = path.basename(originalImagePath, extension); 
-                const uploadDir = path.dirname(originalImagePath); 
-
-                for (const dimensions of sizes) {
-                    const sizeName = `${dimensions.width}x${dimensions.height}`;
-                    const resizedImagePath = path.join(uploadDir, `${baseName}-${sizeName}${extension}`); 
-                    const sizeGuid = `http://localhost:10010/wp-content/uploads/${year}/${month}/${baseName}-${sizeName}${extension}`;
-                    console.log('EXTENSION', extension);
-                    
-                    try {
-                        await sharp(originalImagePath)
-                            .resize(dimensions.width, dimensions.height)
-                            .toFormat('jpg')
-                            .toFile(resizedImagePath); 
-
-                        metadata.sizes[sizeName] = {
-                            file: `${baseName}-${sizeName}${extension}`,
-                            width: dimensions.width,
-                            height: dimensions.height,
-                            mime_type: `image/${extension.replace('.', '')}`
-                        };
-
-                        const sizePostQuery = this.insertAtachmentQuery;
-                        this.db.query(sizePostQuery, ['', '', '', '', '', '', attachmentId, currentDate, `${postName}-${sizeName}`, 1, sizeGuid, `image/${extension}`], (err, result) => {
-                            if (err) {
-                                console.error(`Error inserting ${sizeName} attachment:`, err);
-                                return;
-                            }
-                            console.log(`${sizeName} attachment inserted successfully:`, result);
-                        });
-
-                    } catch (error) {
-                        console.error(`Error processing ${sizeName} image:`, error);
-                    }
-                }
-        
-                // Insertar metadatos en wp_postmeta
-                
-                const metadataWithFile = {
-                    file: relativeImagePath,
-                    sizes: metadata.sizes,
-                    image_meta: {
-                        aperture: "0",
-                        credit: "",
-                        camera: "",
-                        caption: "",
-                        created_timestamp: "0",
-                        copyright: "",
-                        focal_length: "0",
-                        iso: "0",
-                        shutter_speed: "0",
-                        title: "",
-                        orientation: "0",
-                        keywords: []
-                    }
-                };
-        
-                this.db.query(this.metaQuery, [attachmentId, JSON.stringify(metadataWithFile)], (err) => {
-                    if (err) {
-                        console.error('Error inserting metadata for attachment:', err);
-                    } else {
-                        console.log('Metadata for attachment inserted successfully.');
-                    }
-                });
-        
-                // Asignar la imagen como portada del post
-                
-                this.db.query(this.featuredImageQuery, [postId, attachmentId], (err) => {
-                    if (err) {
-                        console.error('Error setting featured image:', err);
-                    } else {
-                        console.log('Featured image set successfully.');
-                    }
-                });
-        
-                // Insertar el `_wp_attached_file` con la ruta relativa
-                
-                this.db.query(this.connectionImageQuery, [attachmentId, relativeImagePath], (err) => {
-                    if (err) {
-                        console.error('Error inserting _wp_attached_file:', err);
-                    } else {
-                        console.log('_wp_attached_file inserted successfully.');
-                    }
-                });
-            });
+    async downloadImage(imageUrl, imagePath) {
+        // Crea el directorio antes de intentar guardar la imagen
+        const dir = path.dirname(imagePath);
+        mkdirp.sync(dir);
+    
+        const writer = fs.createWriteStream(imagePath);
+        const response = await axios({
+            url: imageUrl,
+            method: 'GET',
+            responseType: 'stream',
+            timeout: 10000,
+        });
+    
+        response.data.pipe(writer);
+    
+        return new Promise((resolve, reject) => {
+            writer.on('finish', resolve);
+            writer.on('error', reject);
+        });
     }
-    
-    
-    
+
 
     async insertNota(character) {
             const title = character.name;
@@ -283,6 +151,126 @@ class SQLService {
                 });
             });
     }
+
+
+    async insertAttachment(postId, imageUrl, originalImagePath, postName) {
+        const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const year = new Date().getFullYear();
+        const month = (`0${new Date().getMonth() + 1}`).slice(-2);
+        
+        const sizes = [
+            { width: 150, height: 150, name: 'thumbnail' },
+            { width: 200, height: 165, name: 'buzzmag_small' },
+            { width: 300, height: 300, name: 'medium' },
+            { width: 554, height: 346, name: 'buzzmag_medium' },
+            { width: 554, height: 554, name: 'buzzmag_masonry' },
+            { width: 768, height: 768, name: 'medium_large' },
+            { width: 1024, height: 640, name: 'buzzmag_large' }
+        ];
+        
+        const uploadDir = path.join(`C:/Users/Matias/Local Sites/prueba-del-famoso-tomi/app/public/wp-content/uploads/${year}/${month}`);
+        mkdirp.sync(uploadDir);
+        
+        const extension = path.extname(imageUrl).split('.').pop();
+        const originalGuid = `http://localhost:10010/wp-content/uploads/${year}/${month}/${postName}.${extension}`;
+        const relativeImagePath = `${year}/${month}/${postName}.${extension}`;
+    
+        await this.downloadImage(imageUrl, originalImagePath);
+    
+        const originalPostQuery = this.insertAtachmentQuery;
+        this.db.query(originalPostQuery, ['', '', '', '', '', '', postId, currentDate, postName, 1, originalGuid, `image/${extension}`], async (err, result) => {
+            if (err) {
+                console.error('Error inserting original attachment:', err);
+                return;
+            }
+    
+            const attachmentId = result.insertId;
+            const metadata = { sizes: {} };
+            const baseName = path.basename(originalImagePath, extension);
+            
+            for (const { width, height, name } of sizes) {
+                const sizeImagePath = path.join(uploadDir, `${baseName}-${width}x${height}.${extension}`);
+                const sizeGuid = `http://localhost:10010/wp-content/uploads/${year}/${month}/${baseName}-${width}x${height}.${extension}`;
+                
+                try {
+                    await sharp(originalImagePath)
+                        .resize(width, height)
+                        .toFile(sizeImagePath);
+    
+                    metadata.sizes[name] = {
+                        file: `${baseName}-${width}x${height}.${extension}`,
+                        width: width,
+                        height: height,
+                        mime_type: `image/${extension}`
+                    };
+    
+                    const sizePostQuery = this.insertAtachmentQuery;
+                    this.db.query(sizePostQuery, ['', '', '', '', '', '', attachmentId, currentDate, `${postName}-${width}x${height}`, 1, sizeGuid, `image/${extension}`], (err) => {
+                        if (err) console.error(`Error inserting ${name} attachment:`, err);
+                    });
+                } catch (error) {
+                    console.error(`Error processing ${name} image:`, error);
+                }
+            }
+    
+            const metadataWithFile = {
+                width: 1024,
+                height: 1024,
+                file: relativeImagePath,
+                filesize: fs.statSync(originalImagePath).size,
+                sizes: metadata.sizes,
+                image_meta: {
+                    aperture: "0",
+                    credit: "",
+                    camera: "",
+                    caption: "",
+                    created_timestamp: "0",
+                    copyright: "",
+                    focal_length: "0",
+                    iso: "0",
+                    shutter_speed: "0",
+                    title: "",
+                    orientation: "0",
+                    keywords: []
+                }
+            };
+    
+            const serializedMeta = await this.serializeMeta(metadataWithFile);
+    
+            // Inserción de `_wp_attachment_metadata`
+            const insertMetadataQuery = `INSERT INTO wp_postmeta (post_id, meta_key, meta_value) VALUES (?, '_wp_attachment_metadata', ?)`;
+            if (serializedMeta) {
+                this.db.query(insertMetadataQuery, [attachmentId, serializedMeta], (err) => {
+                    if (err) {
+                        console.error('Error inserting serialized metadata:', err);
+                    } else {
+                        console.log('Serialized metadata inserted successfully.');
+                    }
+                });
+            } else {
+                console.error('Error: Serialized metadata is empty or invalid.');
+            }
+    
+            // Asignación de la imagen como portada del post
+            this.db.query(this.featuredImageQuery, [postId, attachmentId], (err) => {
+                if (err) {
+                    console.error('Error setting featured image:', err);
+                } else {
+                    console.log('Featured image set successfully.');
+                }
+            });
+    
+            // Inserción de `_wp_attached_file`
+            this.db.query(this.connectionImageQuery, [attachmentId, relativeImagePath], (err) => {
+                if (err) {
+                    console.error('Error inserting _wp_attached_file:', err);
+                } else {
+                    console.log('_wp_attached_file inserted successfully.');
+                }
+            });
+        });
+    }
+
         
     async createCategoria(categoryName,) {
         const termInsertQuery = 'INSERT INTO wp_terms (name, slug) VALUES (?, ?)';
@@ -319,7 +307,39 @@ class SQLService {
            
     }
 
+    async serializeMeta(metaObject) {
+        const serialize = (obj) => {
+            if (typeof obj === 'number') {
+                return `i:${obj};`;
+            } else if (typeof obj === 'string') {
+                return `s:${obj.length}:"${obj}";`;
+            } else if (Array.isArray(obj)) {
+                let serialized = `a:${obj.length}:{`;
+                obj.forEach((value, index) => {
+                    serialized += `${serialize(index)}${serialize(value)}`;
+                });
+                serialized += '}';
+                return serialized;
+            } else if (typeof obj === 'object' && obj !== null) {
+                const entries = Object.entries(obj);
+                let serialized = `a:${entries.length}:{`;
+                for (const [key, value] of entries) {
+                    serialized += `${serialize(key)}${serialize(value)}`;
+                }
+                serialized += '}';
+                return serialized;
+            } else {
+                return 'N;';
+            }
+        };
+        return serialize(metaObject);
+    };
+
 
 }
 
-module.exports = SQLService;
+
+// Clase base para el servicio de base de datos
+const sqlService = new SQLService();
+
+module.exports = {sqlService};
