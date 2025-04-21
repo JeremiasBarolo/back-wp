@@ -1,6 +1,10 @@
 const cron = require('node-cron');
 const axios = require('axios');
-import { insertController } from '../src/controllers';
+
+const { 
+    insertMasivo,
+  
+  } = require('../src/controllers/insertController')
 
 const endpoints = [
   'Minería', 'Energía', 'Economía', 'Tecnología', 'MedioAmbiente',
@@ -10,11 +14,13 @@ const endpoints = [
 ];
 
 cron.schedule('0 */2 * * *', async () => {
-    console.log('⏰ Ejecutando insertMasivoPorTema cada 2 horas');
+    
   
     for (const tema of endpoints) {
       try {
-        await insertController.insertMasivo(tema);
+
+        console.log(`🔄 Procesando tema: ${tema}`);
+        await insertMasivo(tema);
       } catch (err) {
         console.error(`❌ Error en tema [${tema}]:`, err.message);
       }
