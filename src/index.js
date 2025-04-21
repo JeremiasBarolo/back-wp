@@ -1,3 +1,4 @@
+require('../scripts/cron-tareas');
 const express = require('express');
 const app = express();
 require('dotenv').config(); 
@@ -7,13 +8,12 @@ app.use(express.json());
 
 // routes
 const { 
-  insertRouter,
+  insertController,
 
-} = require('./routes')
+} = require('./controllers')
 
 
-app.use('/insert', insertRouter);
-
+app.post('/insert/:tema', insertController.insertMasivo);
 
 
 

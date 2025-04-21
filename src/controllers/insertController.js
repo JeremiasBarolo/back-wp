@@ -1,17 +1,32 @@
-// const { sqlService } = require('../classes/sqlService');
 const  WpApiService  = require('../classes/wpApiService');
+const database = require('../db/database');
+
 
 
 const insertMasivo = async (req, res) => {
   try {
-    const {username, password, siteurl} = req.body;
-    const wpApiService = new WpApiService(siteurl, username, password);
+   
+    const { query, release } = await database.connection();
+    const {tema} = req.params;
 
-    const response = await wpApiService.insertMasivo();
+    if (!tema) {
+        return res.status(400).json({ error: 'El tema es obligatorio' });
+    }
 
-    console.log('Posts Insertados de manera correcta');
+    const [{url}] = await query('SELECT url FROM red_mira WHERE tema = ?',[tema])
+
+    release()
     
-    res.json(response);
+
+    const wpApiService = new WpApiService(url);
+
+    const response = await wpApiService.insertMasivo(tema);
+    if(response){
+      res.json('Posts Insertados de manera correcta');
+    }else{
+      res.json('No hay noticias disponibles para el tema especificado.');
+    }
+    
   } catch (err) {
     res.status(500).json({ action: "insertMasivo", error: err.message });
   }

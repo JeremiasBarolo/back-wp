@@ -1,17 +1,18 @@
 const axios = require('axios');
 const FormData = require('form-data');
 const sharp = require('sharp');
+const database = require('../db/database');
 
 class WpApiService {
     constructor(siteurl, username, password) {
         this.siteurl = siteurl;
-        this.username = username;
-        this.password = password;
+        this.username = 'admin';
+        this.password = 'Perrohugo8332';
     }
 
     async getJWTToken() {
         try {
-            const response = await axios.post(`${this.siteurl}wp-json/jwt-auth/v1/token`, {
+            const response = await axios.post(`${this.siteurl}/wp-json/jwt-auth/v1/token`, {
                 username: this.username,
                 password: this.password
             });
@@ -77,16 +78,19 @@ class WpApiService {
         }
     }
 
-    async createPostWithImage(postData, token) {
+    async createPostWithImage(postData, token, tema) {
         try {
             const {
-                Titular, Cuerpo, Bajada, Imagen, Tags, "Fecha Original": FechaOriginal, Autor
+                Titular, Cuerpo, Bajada, Imagen, Tags, "Fecha Original": FechaOriginal, Autor, id
             } = postData;
 
+            const { query, release } = await database.connection();
+
+        
             
             const imageId = await this.uploadImageFromURL(Imagen, token, Titular);
 
-            // Crear o verificar tags y obtener sus IDs
+            
             const tagIds = [];
             for (const tag of Tags) {
                 const tagId = await this.createOrGetTagId(tag, token);
@@ -111,6 +115,109 @@ class WpApiService {
                 }
             );
 
+            if(response){
+                await query(`INSERT INTO posts (id_post, categoria) VALUES (?, ?)`, [postData.id, tema])
+
+            }
+
+            console.log(`Post creado con éxito: ${response.data.id} en ${tema}`);
+
+            release()
+
+            return response.data;
+        } catch (error) {
+            console.error('Error al crear el post con imagen:', error.response?.data || error.message);
+            throw error;
+        }
+    }
+
+    async insertMasivo(tema) {
+        try {
+            const temaEncoded = encodeURIComponent(tema);
+
+            const response = await axios.get(`http://200.111.128.26:50888/datos?Tema=${temaEncoded}`);
+            const posts = response.data; 
+    
+            
+            const idsPosts = posts.map(post => post.id);
+    
+            
+            const existingPosts = await this.getExistingPosts(idsPosts);
+    
+            
+            const newPosts = posts.filter(post => !existingPosts.includes(post.id));
+    
+            if (newPosts.length === 0) {
+                console.log('No hay posts nuevos para insertar.');
+                return;
+            }
+    
+            const token = await this.getJWTToken();
+
+            let counter = 0;
+
+            for (const post of newPosts) {
+                try {
+                    await this.createPostWithImage(post, token, tema);
+                    counter++; // Incrementamos correctamente el contador
+                    console.log(`Post número ${counter} de ${newPosts.length}`);
+                    
+                } catch (postError) {
+                    console.error(`Error procesando post "${post.Titular}":`, postError.message);
+                }
+            }
+
+    
+            console.log(`Proceso masivo completado. Se insertaron ${newPosts.length} nuevos posts.`);
+            return true
+    
+        } catch (error) {
+            console.error('Error en el proceso masivo:', error.message);
+        }
+    }
+
+
+
+    async createPostWithImageRAM(postData, token) {
+        try {
+            const {name, species, status, gender, image} = postData;
+
+            
+
+            
+            const imageId = await this.uploadImageFromURL(image, token, name);
+
+            
+            // const tagIds = [];
+            // for (const tag of ) {
+            //     const tagId = await this.createOrGetTagId(tag, token);
+            //     tagIds.push(tagId);
+            // }
+
+            
+            const response = await axios.post(
+                `${this.siteurl}/wp-json/wp/v2/posts`,
+                {
+                    title: name,
+                    content: `<p>
+                    loremp ipsum dolor sit amet, consectetur adipiscing elit ${name} ${species} ${status} 
+                    loremp ipsum dolor sit amet, consectetur adipiscing elit ${name} ${species} ${status} 
+                    loremp ipsum dolor sit amet, consectetur adipiscing elit ${name} ${species} ${status} 
+                    </p><p><em>Autor: ${name}</em></p>`,
+
+                    excerpt: `
+                    loremp ipsum dolor sit amet, consectetur adipiscing elit ${name} ${species} ${status} 
+                     `, 
+                    status: 'publish',
+                    featured_media: imageId,
+                    date: new Date(),
+                    categories: [1], // Ajusta la categoría si es necesario
+                },
+                {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }
+            );
+
             console.log(`Post creado con éxito: ${response.data.id}`);
             return response.data;
         } catch (error) {
@@ -119,24 +226,15 @@ class WpApiService {
         }
     }
 
-    async insertMasivo() {
+
+    async getExistingPosts(ids) {
+        const { query, release } = await database.connection();
         try {
-            const response = await axios.get('http://200.111.128.26:50888/datos');
-            const posts = response.data
-            // const post = response.data[0]
-            const token = await this.getJWTToken();
-
-            for (const post of posts) {
-                try {
-                    await this.createPostWithImage(post, token);
-                } catch (postError) {
-                    console.error(`Error procesando post "${post.Titular}":`, postError.message);
-                }
-            }
-
-            console.log('Proceso masivo completado.');
+            const result = await query('SELECT id_post FROM posts WHERE id_post IN (?)', [ids]);
+            return result.map(row => row.id_post); 
         } catch (error) {
-            console.error('Error en el proceso masivo:', error.message);
+            console.error('Error consultando posts existentes:', error.message);
+            return [];
         }
     }
 }
