@@ -1,5 +1,6 @@
 const cron = require('node-cron');
 const axios = require('axios');
+import { insertController } from '../src/controllers';
 
 const endpoints = [
   'Minería', 'Energía', 'Economía', 'Tecnología', 'MedioAmbiente',
@@ -8,17 +9,14 @@ const endpoints = [
   'Temuco', 'BioBio', 'Comercio', 'Magallanes'
 ];
 
-cron.schedule('* * * * *', async () => {
-  console.log('⏰ Ejecutando cron cada 2 horas');
-
-  for (const categoria of endpoints) {
-    // const url = `http://34.232.188.56:8080/insert/${categoria}`;
-    const url = `http://localhost:8080/insert/${categoria}`;
-    try {
-      const res = await axios.post(url);
-      console.log(`✅ ${categoria} ->`, res.status);
-    } catch (err) {
-      console.error(`❌ Error en ${categoria} ->`, err.message);
+cron.schedule('0 */2 * * *', async () => {
+    console.log('⏰ Ejecutando insertMasivoPorTema cada 2 horas');
+  
+    for (const tema of endpoints) {
+      try {
+        await insertController.insertMasivo(tema);
+      } catch (err) {
+        console.error(`❌ Error en tema [${tema}]:`, err.message);
+      }
     }
-  }
-});
+  });
