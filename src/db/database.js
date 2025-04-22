@@ -22,17 +22,17 @@ const connection = () => {
             if (err) {
               return reject(err);
             }
-            console.log("MySQL pool connected ✔");
+            // console.log("MySQL pool connected ✔");
             resolve(result);
             
-            console.log("Query ejecutada correctamente");
+            // console.log("Query ejecutada correctamente");
           });
         });
       };
 
       const release = () => {
         connection.release();
-        console.log("MySQL pool released ❌");
+        // console.log("MySQL pool released ❌");
       };
 
       resolve({ query, release });

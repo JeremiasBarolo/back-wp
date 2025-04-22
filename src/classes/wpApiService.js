@@ -23,7 +23,7 @@ class WpApiService {
         }
     }
 
-    async uploadImageFromURL(imageUrl, token, tituloImagen) {
+    async uploadImageFromURL(imageUrl, token, tituloImagen, tema) {
         try {
             const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
             const resizedImage = await sharp(imageResponse.data)
@@ -47,24 +47,24 @@ class WpApiService {
             );
             return uploadResponse.data.id; 
         } catch (error) {
-            console.error('Error al subir la imagen:', error.response?.data || error.message);
+            console.error(`Error al subir la imagen de ${tema}:`, error.response?.data || error.message);
             throw error;
         }
     }
 
     async createOrGetTagId(tagName, token) {
         try {
-            // Verificar si el tag ya existe
+           
             const existingTags = await axios.get(`${this.siteurl}/wp-json/wp/v2/tags`, {
                 params: { search: tagName },
                 headers: { 'Authorization': `Bearer ${token}` }
             });
     
             if (existingTags.data.length > 0) {
-                // Si el tag existe, devolver su ID
+                
                 return existingTags.data[0].id;
             } else {
-                // Si el tag no existe, crearlo
+                
                 const newTagResponse = await axios.post(`${this.siteurl}/wp-json/wp/v2/tags`, {
                     name: tagName
                 }, {
@@ -88,7 +88,7 @@ class WpApiService {
 
         
             
-            const imageId = await this.uploadImageFromURL(Imagen, token, Titular);
+            const imageId = await this.uploadImageFromURL(Imagen, token, Titular, tema);
 
             
             const tagIds = [];
