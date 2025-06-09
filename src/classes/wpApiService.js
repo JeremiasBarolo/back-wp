@@ -2,6 +2,7 @@ const axios = require('axios');
 const FormData = require('form-data');
 const sharp = require('sharp');
 const database = require('../db/database');
+const logger = require('../utils/logger');
 
 class WpApiService {
     constructor(siteurl, username, password) {
@@ -132,49 +133,42 @@ class WpApiService {
     }
 
     async insertMasivo(tema) {
-        try {
-            const temaEncoded = encodeURIComponent(tema);
+    try {
+        const temaEncoded = encodeURIComponent(tema);
+        const response = await axios.get(`http://200.111.128.26:50888/datos?Tema=${temaEncoded}`);
+        const posts = response.data;
 
-            const response = await axios.get(`http://200.111.128.26:50888/datos?Tema=${temaEncoded}`);
-            const posts = response.data; 
-    
-            
-            const idsPosts = posts.map(post => post.id);
-    
-            
-            const existingPosts = await this.getExistingPosts(idsPosts);
-    
-            
-            const newPosts = posts.filter(post => !existingPosts.includes(post.id));
-    
-            if (newPosts.length === 0) {
-                console.log('No hay posts nuevos para insertar.');
-                return;
-            }
-    
-            const token = await this.getJWTToken();
+        const idsPosts = posts.map(post => post.id);
+        const existingPosts = await this.getExistingPosts(idsPosts);
+        const newPosts = posts.filter(post => !existingPosts.includes(post.id));
 
-            let counter = 0;
-
-            for (const post of newPosts) {
-                try {
-                    await this.createPostWithImage(post, token, tema);
-                    counter++; // Incrementamos correctamente el contador
-                    console.log(`Post número ${counter} de ${newPosts.length}`);
-                    
-                } catch (postError) {
-                    console.error(`Error procesando post "${post.Titular}":`, postError.message);
-                }
-            }
-
-    
-            console.log(`Proceso masivo completado. Se insertaron ${newPosts.length} nuevos posts.`);
-            return true
-    
-        } catch (error) {
-            console.error('Error en el proceso masivo:', error.message);
+        if (newPosts.length === 0) {
+            logger.info(`⚠️ [${tema}] No hay posts nuevos para insertar.`);
+            return;
         }
+
+        const token = await this.getJWTToken();
+
+        let insertados = 0;
+        let errores = 0;
+
+        for (const post of newPosts) {
+            try {
+                await this.createPostWithImage(post, token, tema);
+                insertados++;
+            } catch (postError) {
+                errores++;
+                logger.error(`❌ [${tema}] Error con post "${post.Titular}": ${postError.message}`);
+            }
+        }
+
+        logger.info(`✅ [${tema}] Proceso terminado. Insertados: ${insertados}. Errores: ${errores}.`);
+        return true;
+    } catch (error) {
+        logger.error(`❌ [${tema}] Error general en el proceso masivo: ${error.message}`);
+        throw error;
     }
+}
 
 
 
