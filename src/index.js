@@ -13,7 +13,7 @@ const {
 } = require('./controllers')
 
 
-// app.post('/insert/:tema', insertController.insertMasivo);
+// app.post('/test-temas', insertController.testTemas);
 
 
 

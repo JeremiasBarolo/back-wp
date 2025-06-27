@@ -16,7 +16,7 @@ const endpoints = [
   'GiGi', 'Vibra', 'Neon'
 ];
 
-cron.schedule('0 */4 * * *', async () => {
+cron.schedule('0 */2 * * *', async () => {
   logger.info(`⏰ Inicio del proceso masivo [${new Date().toLocaleString()}]`);
 
   for (const tema of endpoints) {

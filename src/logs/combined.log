@@ -1,0 +1,140 @@
+[2025-06-10T12:49:39.042Z] INFO: ▶️ Iniciando tema: Minería
+[2025-06-10T12:49:41.045Z] INFO: ▶️ Iniciando tema: Energía
+[2025-06-10T12:50:29.222Z] INFO: ▶️ Iniciando tema: Minería
+[2025-06-10T12:50:43.463Z] INFO: ▶️ Iniciando tema: Energía
+[2025-06-10T13:02:39.553Z] INFO: ▶️ Iniciando tema: Minería
+[2025-06-10T13:02:40.963Z] INFO: ✅ Tema Minería procesado correctamente con 20 items
+[2025-06-10T13:02:40.963Z] INFO: ▶️ Iniciando tema: Energía
+[2025-06-10T13:02:41.577Z] INFO: ✅ Tema Energía procesado correctamente con 20 items
+[2025-06-10T13:02:41.579Z] INFO: ▶️ Iniciando tema: Economía
+[2025-06-10T13:03:08.892Z] INFO: ▶️ Iniciando tema: Minería
+[2025-06-10T13:03:10.895Z] INFO: ✅ Tema Minería procesado correctamente con 20 items
+[2025-06-10T13:03:10.896Z] INFO: ▶️ Iniciando tema: Energía
+[2025-06-10T13:03:11.494Z] INFO: ✅ Tema Energía procesado correctamente con 20 items
+[2025-06-10T13:03:11.495Z] INFO: ▶️ Iniciando tema: Economía
+[2025-06-10T13:03:44.226Z] INFO: ▶️ Iniciando tema: Minería
+[2025-06-10T13:03:45.634Z] INFO: ✅ Tema Minería procesado correctamente con 20 items
+[2025-06-10T13:03:45.635Z] INFO: ▶️ Iniciando tema: Energía
+[2025-06-10T13:03:46.148Z] INFO: ✅ Tema Energía procesado correctamente con 20 items
+[2025-06-10T13:03:46.149Z] INFO: ▶️ Iniciando tema: Economía
+[2025-06-10T13:03:46.247Z] ERROR: ❌ Error:
+[2025-06-10T13:06:24.902Z] INFO: ▶️ Iniciando tema: Minería
+[2025-06-10T13:06:33.138Z] INFO: ✅ Tema Minería - 18/20 imágenes OK
+[2025-06-10T13:06:33.139Z] INFO: ▶️ Iniciando tema: Energía
+[2025-06-10T13:06:37.006Z] INFO: ✅ Tema Energía - 20/20 imágenes OK
+[2025-06-10T13:06:37.007Z] INFO: ▶️ Iniciando tema: Economía
+[2025-06-10T13:06:37.105Z] ERROR: ❌ Fallo al procesar tema Economía: Request failed with status code 404
+[2025-06-10T13:06:37.106Z] INFO: ▶️ Iniciando tema: Tecnología
+[2025-06-10T13:06:41.169Z] INFO: ✅ Tema Tecnología - 20/20 imágenes OK
+[2025-06-10T13:06:41.170Z] INFO: ▶️ Iniciando tema: MedioAmbiente
+[2025-06-10T13:06:41.266Z] ERROR: ❌ Fallo al procesar tema MedioAmbiente: Request failed with status code 404
+[2025-06-10T13:06:41.267Z] INFO: ▶️ Iniciando tema: Viajes
+[2025-06-10T13:06:41.360Z] ERROR: ❌ Fallo al procesar tema Viajes: Request failed with status code 404
+[2025-06-10T13:06:41.361Z] INFO: ▶️ Iniciando tema: Saludable
+[2025-06-10T13:06:41.460Z] ERROR: ❌ Fallo al procesar tema Saludable: Request failed with status code 404
+[2025-06-10T13:06:41.461Z] INFO: ▶️ Iniciando tema: CodigoRojo
+[2025-06-10T13:06:41.559Z] ERROR: ❌ Fallo al procesar tema CodigoRojo: Request failed with status code 404
+[2025-06-10T13:06:41.561Z] INFO: ▶️ Iniciando tema: Antofagasta
+[2025-06-10T13:06:44.542Z] INFO: ✅ Tema Antofagasta - 20/20 imágenes OK
+[2025-06-10T13:06:44.543Z] INFO: ▶️ Iniciando tema: Atacama
+[2025-06-10T13:06:47.381Z] INFO: ✅ Tema Atacama - 19/20 imágenes OK
+[2025-06-10T13:06:47.382Z] INFO: ▶️ Iniciando tema: Coquimbo
+[2025-06-10T13:06:49.924Z] INFO: ✅ Tema Coquimbo - 16/20 imágenes OK
+[2025-06-10T13:06:49.925Z] INFO: ▶️ Iniciando tema: Comercio
+[2025-06-10T13:06:50.021Z] ERROR: ❌ Fallo al procesar tema Comercio: Request failed with status code 404
+[2025-06-10T13:06:50.023Z] INFO: ▶️ Iniciando tema: Valparaiso
+[2025-06-10T13:06:50.119Z] ERROR: ❌ Fallo al procesar tema Valparaiso: Request failed with status code 404
+[2025-06-10T13:06:50.120Z] INFO: ▶️ Iniciando tema: Temuco
+[2025-06-10T13:06:50.212Z] ERROR: ❌ Fallo al procesar tema Temuco: Request failed with status code 404
+[2025-06-10T13:06:50.214Z] INFO: ▶️ Iniciando tema: BioBio
+[2025-06-10T13:06:50.306Z] ERROR: ❌ Fallo al procesar tema BioBio: Request failed with status code 404
+[2025-06-10T13:06:50.307Z] INFO: ▶️ Iniciando tema: Comercio
+[2025-06-10T13:06:50.405Z] ERROR: ❌ Fallo al procesar tema Comercio: Request failed with status code 404
+[2025-06-10T13:06:50.406Z] INFO: ▶️ Iniciando tema: Magallanes
+[2025-06-10T13:06:53.827Z] INFO: ✅ Tema Magallanes - 20/20 imágenes OK
+[2025-06-10T13:06:53.828Z] INFO: ▶️ Iniciando tema: GiGi
+[2025-06-10T13:06:53.925Z] ERROR: ❌ Fallo al procesar tema GiGi: Request failed with status code 404
+[2025-06-10T13:06:53.926Z] INFO: ▶️ Iniciando tema: Vibra
+[2025-06-10T13:06:54.023Z] ERROR: ❌ Fallo al procesar tema Vibra: Request failed with status code 404
+[2025-06-10T13:06:54.025Z] INFO: ▶️ Iniciando tema: Neon
+[2025-06-10T13:06:54.117Z] ERROR: ❌ Fallo al procesar tema Neon: Request failed with status code 404
+[2025-06-25T12:42:50.887Z] INFO: ▶️ Iniciando tema: Minería
+[2025-06-25T12:42:51.221Z] INFO: ✅ Tema Minería - 0/1 imágenes OK
+[2025-06-25T12:42:51.222Z] INFO: ▶️ Iniciando tema: Energía
+[2025-06-25T12:42:51.320Z] INFO: ✅ Tema Energía - 0/2 imágenes OK
+[2025-06-25T12:42:51.321Z] INFO: ▶️ Iniciando tema: Economía
+[2025-06-25T12:42:51.413Z] ERROR: ❌ Fallo al procesar tema Economía: Request failed with status code 404
+[2025-06-25T12:42:51.414Z] INFO: ▶️ Iniciando tema: Tecnología
+[2025-06-25T12:42:51.507Z] INFO: ✅ Tema Tecnología - 0/2 imágenes OK
+[2025-06-25T12:42:51.507Z] INFO: ▶️ Iniciando tema: MedioAmbiente
+[2025-06-25T12:42:51.591Z] ERROR: ❌ Fallo al procesar tema MedioAmbiente: Request failed with status code 404
+[2025-06-25T12:42:51.592Z] INFO: ▶️ Iniciando tema: Viajes
+[2025-06-25T12:42:51.698Z] ERROR: ❌ Fallo al procesar tema Viajes: Request failed with status code 404
+[2025-06-25T12:42:51.698Z] INFO: ▶️ Iniciando tema: Saludable
+[2025-06-25T12:42:51.783Z] ERROR: ❌ Fallo al procesar tema Saludable: Request failed with status code 404
+[2025-06-25T12:42:51.783Z] INFO: ▶️ Iniciando tema: CodigoRojo
+[2025-06-25T12:42:51.871Z] ERROR: ❌ Fallo al procesar tema CodigoRojo: Request failed with status code 404
+[2025-06-25T12:42:51.872Z] INFO: ▶️ Iniciando tema: Antofagasta
+[2025-06-25T12:42:51.959Z] INFO: ✅ Tema Antofagasta - 0/2 imágenes OK
+[2025-06-25T12:42:51.959Z] INFO: ▶️ Iniciando tema: Atacama
+[2025-06-25T12:42:52.052Z] INFO: ✅ Tema Atacama - 0/1 imágenes OK
+[2025-06-25T12:42:52.052Z] INFO: ▶️ Iniciando tema: Coquimbo
+[2025-06-25T12:42:52.161Z] ERROR: ❌ Fallo al procesar tema Coquimbo: Request failed with status code 404
+[2025-06-25T12:42:52.162Z] INFO: ▶️ Iniciando tema: Comercio
+[2025-06-25T12:42:52.248Z] ERROR: ❌ Fallo al procesar tema Comercio: Request failed with status code 404
+[2025-06-25T12:42:52.248Z] INFO: ▶️ Iniciando tema: Valparaiso
+[2025-06-25T12:42:52.329Z] ERROR: ❌ Fallo al procesar tema Valparaiso: Request failed with status code 404
+[2025-06-25T12:42:52.329Z] INFO: ▶️ Iniciando tema: Temuco
+[2025-06-25T12:42:52.413Z] ERROR: ❌ Fallo al procesar tema Temuco: Request failed with status code 404
+[2025-06-25T12:42:52.414Z] INFO: ▶️ Iniciando tema: BioBio
+[2025-06-25T12:42:52.527Z] ERROR: ❌ Fallo al procesar tema BioBio: Request failed with status code 404
+[2025-06-25T12:42:52.527Z] INFO: ▶️ Iniciando tema: Comercio
+[2025-06-25T12:42:52.630Z] ERROR: ❌ Fallo al procesar tema Comercio: Request failed with status code 404
+[2025-06-25T12:42:52.631Z] INFO: ▶️ Iniciando tema: Magallanes
+[2025-06-25T12:42:52.748Z] INFO: ✅ Tema Magallanes - 0/2 imágenes OK
+[2025-06-25T12:42:52.748Z] INFO: ▶️ Iniciando tema: GiGi
+[2025-06-25T12:42:52.835Z] ERROR: ❌ Fallo al procesar tema GiGi: Request failed with status code 404
+[2025-06-25T12:42:52.836Z] INFO: ▶️ Iniciando tema: Vibra
+[2025-06-25T12:42:52.926Z] ERROR: ❌ Fallo al procesar tema Vibra: Request failed with status code 404
+[2025-06-25T12:42:52.927Z] INFO: ▶️ Iniciando tema: Neon
+[2025-06-25T12:42:53.019Z] ERROR: ❌ Fallo al procesar tema Neon: Request failed with status code 404
+[2025-06-27T12:24:47.944Z] INFO: ▶️ Iniciando tema: Minería
+[2025-06-27T12:24:49.702Z] INFO: ✅ Tema Minería - 5/5 imágenes OK
+[2025-06-27T12:24:49.702Z] INFO: ▶️ Iniciando tema: Energía
+[2025-06-27T12:24:50.496Z] INFO: ✅ Tema Energía - 4/4 imágenes OK
+[2025-06-27T12:24:50.497Z] INFO: ▶️ Iniciando tema: Economía
+[2025-06-27T12:24:50.583Z] ERROR: ❌ Fallo al procesar tema Economía: Request failed with status code 404
+[2025-06-27T12:24:50.584Z] INFO: ▶️ Iniciando tema: Tecnología
+[2025-06-27T12:24:51.358Z] INFO: ✅ Tema Tecnología - 4/4 imágenes OK
+[2025-06-27T12:24:51.359Z] INFO: ▶️ Iniciando tema: MedioAmbiente
+[2025-06-27T12:24:51.450Z] ERROR: ❌ Fallo al procesar tema MedioAmbiente: Request failed with status code 404
+[2025-06-27T12:24:51.450Z] INFO: ▶️ Iniciando tema: Viajes
+[2025-06-27T12:24:51.547Z] ERROR: ❌ Fallo al procesar tema Viajes: Request failed with status code 404
+[2025-06-27T12:24:51.547Z] INFO: ▶️ Iniciando tema: Saludable
+[2025-06-27T12:24:51.639Z] ERROR: ❌ Fallo al procesar tema Saludable: Request failed with status code 404
+[2025-06-27T12:24:51.639Z] INFO: ▶️ Iniciando tema: CodigoRojo
+[2025-06-27T12:24:51.724Z] ERROR: ❌ Fallo al procesar tema CodigoRojo: Request failed with status code 404
+[2025-06-27T12:24:51.725Z] INFO: ▶️ Iniciando tema: Antofagasta
+[2025-06-27T12:24:52.319Z] INFO: ✅ Tema Antofagasta - 3/3 imágenes OK
+[2025-06-27T12:24:52.319Z] INFO: ▶️ Iniciando tema: Atacama
+[2025-06-27T12:24:52.925Z] INFO: ✅ Tema Atacama - 3/3 imágenes OK
+[2025-06-27T12:24:52.926Z] INFO: ▶️ Iniciando tema: Coquimbo
+[2025-06-27T12:24:53.706Z] INFO: ✅ Tema Coquimbo - 4/4 imágenes OK
+[2025-06-27T12:24:53.706Z] INFO: ▶️ Iniciando tema: Comercio
+[2025-06-27T12:24:53.794Z] ERROR: ❌ Fallo al procesar tema Comercio: Request failed with status code 404
+[2025-06-27T12:24:53.794Z] INFO: ▶️ Iniciando tema: Valparaiso
+[2025-06-27T12:24:53.882Z] ERROR: ❌ Fallo al procesar tema Valparaiso: Request failed with status code 404
+[2025-06-27T12:24:53.883Z] INFO: ▶️ Iniciando tema: Temuco
+[2025-06-27T12:24:53.978Z] ERROR: ❌ Fallo al procesar tema Temuco: Request failed with status code 404
+[2025-06-27T12:24:53.978Z] INFO: ▶️ Iniciando tema: BioBio
+[2025-06-27T12:24:54.060Z] ERROR: ❌ Fallo al procesar tema BioBio: Request failed with status code 404
+[2025-06-27T12:24:54.060Z] INFO: ▶️ Iniciando tema: Comercio
+[2025-06-27T12:24:54.144Z] ERROR: ❌ Fallo al procesar tema Comercio: Request failed with status code 404
+[2025-06-27T12:24:54.144Z] INFO: ▶️ Iniciando tema: Magallanes
+[2025-06-27T12:24:54.734Z] INFO: ✅ Tema Magallanes - 3/3 imágenes OK
+[2025-06-27T12:24:54.734Z] INFO: ▶️ Iniciando tema: GiGi
+[2025-06-27T12:24:54.821Z] ERROR: ❌ Fallo al procesar tema GiGi: Request failed with status code 404
+[2025-06-27T12:24:54.822Z] INFO: ▶️ Iniciando tema: Vibra
+[2025-06-27T12:24:54.914Z] ERROR: ❌ Fallo al procesar tema Vibra: Request failed with status code 404
+[2025-06-27T12:24:54.914Z] INFO: ▶️ Iniciando tema: Neon
+[2025-06-27T12:24:55.002Z] ERROR: ❌ Fallo al procesar tema Neon: Request failed with status code 404
