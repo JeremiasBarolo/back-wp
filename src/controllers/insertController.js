@@ -3,7 +3,7 @@ const database = require('../db/database');
 const logger = require('../utils/logger');
 const axios = require('axios');
 
-const insertMasivo= async (tema) => {
+const insertMasivo= async (tema, url_nota) => {
   if (!tema) throw new Error('El tema es obligatorio');
 
   const { query, release } = await database.connection();
@@ -12,7 +12,7 @@ const insertMasivo= async (tema) => {
     release();
 
     const wpApiService = new WpApiService(url);
-    const response = await wpApiService.insertMasivo(tema);
+    const response = await wpApiService.insertMasivo(tema, url_nota);
 
     if (response) {
       console.log(`✅ [${tema}] Posts insertados correctamente`);
@@ -33,11 +33,22 @@ const insertMasivo= async (tema) => {
 
 const testTemas = async (req, res) => {
   const endpoints = [
-    'Minería', 'Energía', 'Economía', 'Tecnología', 'MedioAmbiente',
-    'Viajes', 'Saludable', 'CodigoRojo', 'Antofagasta',
-    'Atacama', 'Coquimbo', 'Comercio', 'Valparaiso',
-    'Temuco', 'BioBio', 'Comercio', 'Magallanes',
-    'GiGi', 'Vibra', 'Neon'
+    { nombre: "Antofagasta", url: "http://200.111.128.26:50888/datos?Tema=Antofagasta" },
+    { nombre: "Atacama", url: "http://200.111.128.26:50888/datos?Tema=Atacama" },
+    { nombre: "BioBio", url: "http://200.111.128.26:50888/datos?Tema=Biobío" },
+    { nombre: "Bienestar", url: "http://200.111.128.26:50888/datos?Tema=Bienestar" },
+    { nombre: "CodigoRojo", url: "http://200.111.128.26:50888/datos?Tema=CodigoRojo" },
+    { nombre: "Coquimbo", url: "http://200.111.128.26:50888/datos?Tema=Coquimbo" },
+    { nombre: "Emprendimiento", url: "http://200.111.128.26:50888/datos?Tema=Emprendimiento" },
+    { nombre: "Economía", url: "http://200.111.128.26:50888/datos?Tema=Energía" },
+    { nombre: "Finanzas", url: "http://200.111.128.26:50888/datos?Tema=Finanzas" },
+    { nombre: "Temuco", url: "http://200.111.128.26:50888/datos?Tema=La%20Araucanía" },
+    { nombre: "Magallanes", url: "http://200.111.128.26:50888/datos?Tema=Magallanes" },
+    { nombre: "Minería", url: "http://200.111.128.26:50888/datos?Tema=Minería" },
+    { nombre: "Comercio", url: "http://200.111.128.26:50888/datos?Tema=Retail" },
+    { nombre: "Tecnología", url: "http://200.111.128.26:50888/datos?Tema=Tecnología" },
+    { nombre: "Turismo", url: "http://200.111.128.26:50888/datos?Tema=Turismo" },
+    { nombre: "Valparaiso", url: "http://200.111.128.26:50888/datos?Tema=Valparaíso" }
   ];
 
   try {
@@ -45,9 +56,8 @@ const testTemas = async (req, res) => {
 
     for (const tema of endpoints) {
       const temaResult = {
-        tema: tema,
-        encodedTema: encodeURIComponent(tema),
-        url: `http://200.111.128.26:50888/datos?Tema=${encodeURIComponent(tema)}`,
+        tema: tema.nombre,
+        url: `${tema.url}`,
         status: 'pending',
         itemsTested: 0,
         itemsSuccessful: 0,
@@ -57,18 +67,18 @@ const testTemas = async (req, res) => {
       };
 
       try {
-        logger.info(`▶️ Iniciando tema: ${tema}`);
+        logger.info(`▶️ Iniciando tema: ${tema.nombre}`);
         const response = await axios.get(temaResult.url);
         
         const testItems = response.data.slice(0, 20);
         temaResult.itemsTested = testItems.length;
         temaResult.status = 'testing_images';
 
-        // Test each image in the items
+        
         for (const [index, item] of testItems.entries()) {
           const itemResult = {
             itemIndex: index,
-            imageUrl: item.Imagen, // Assuming the field is called "Imagen"
+            imageUrl: item.Imagen, 
             status: 'pending',
             response: null,
             error: null
@@ -96,7 +106,7 @@ const testTemas = async (req, res) => {
         }
 
         temaResult.status = temaResult.itemsFailed === 0 ? 'complete_success' : 'partial_success';
-        logger.info(`✅ Tema ${tema} - ${temaResult.itemsSuccessful}/${temaResult.itemsTested} imágenes OK`);
+        logger.info(`✅ Tema ${tema.nombre} - ${temaResult.itemsSuccessful}/${temaResult.itemsTested} imágenes OK`);
 
       } catch (error) {
         temaResult.status = 'failed';

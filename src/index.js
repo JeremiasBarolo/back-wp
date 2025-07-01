@@ -13,7 +13,7 @@ const {
 } = require('./controllers')
 
 
-// app.post('/test-temas', insertController.testTemas);
+app.post('/test-temas', insertController.testTemas);
 
 
 

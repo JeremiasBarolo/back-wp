@@ -132,10 +132,9 @@ class WpApiService {
         }
     }
 
-    async insertMasivo(tema) {
+    async insertMasivo(tema, url_nota) {
     try {
-        const temaEncoded = encodeURIComponent(tema);
-        const response = await axios.get(`http://200.111.128.26:50888/datos?Tema=${temaEncoded}`);
+        const response = await axios.get(`${url_nota}`);
         const posts = response.data;
 
         const idsPosts = posts.map(post => post.id);
@@ -145,20 +144,26 @@ class WpApiService {
         if (newPosts.length === 0) {
             logger.info(`⚠️ [${tema}] No hay posts nuevos para insertar.`);
             return;
+        } else {
+            logger.info(`▶️ [${tema}] Hay ${newPosts.length} posts nuevos para insertar.`);
         }
 
         const token = await this.getJWTToken();
 
         let insertados = 0;
         let errores = 0;
+        const total = newPosts.length;
 
-        for (const post of newPosts) {
+        for (const [index, post] of newPosts.entries()) {
             try {
                 await this.createPostWithImage(post, token, tema);
+
                 insertados++;
+                logger.info(`🔄 [${tema}] Progreso: ${index + 1}/${total} - Insertados: ${insertados} Errores: ${errores}`);
             } catch (postError) {
                 errores++;
                 logger.error(`❌ [${tema}] Error con post "${post.Titular}": ${postError.message}`);
+                logger.info(`🔄 [${tema}] Progreso: ${index + 1}/${total} - Insertados: ${insertados} Errores: ${errores}`);
             }
         }
 
@@ -169,6 +174,7 @@ class WpApiService {
         throw error;
     }
 }
+
 
 
 
