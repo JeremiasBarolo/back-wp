@@ -117,11 +117,11 @@ class WpApiService {
             );
 
             if(response){
-                await query(`INSERT INTO posts (id_post, categoria) VALUES (?, ?)`, [postData.id, tema])
-
+                await query(`INSERT INTO posts (id_post, categoria, url_post_insertado) VALUES (?, ?, ?)`, [postData.id, tema, response.data.link])
             }
 
             console.log(`Post creado con éxito: ${response.data.id} en ${tema}`);
+
 
             release()
 
@@ -160,6 +160,7 @@ class WpApiService {
 
                 insertados++;
                 logger.info(`🔄 [${tema}] Progreso: ${index + 1}/${total} - Insertados: ${insertados} Errores: ${errores}`);
+                
             } catch (postError) {
                 errores++;
                 logger.error(`❌ [${tema}] Error con post "${post.Titular}": ${postError.message}`);

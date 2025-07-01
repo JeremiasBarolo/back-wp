@@ -17,7 +17,7 @@ const endpoints = [
   { nombre: "Minería", url: "http://200.111.128.26:50888/datos?Tema=Minería" },
   { nombre: "Comercio", url: "http://200.111.128.26:50888/datos?Tema=Retail" },
   { nombre: "Tecnología", url: "http://200.111.128.26:50888/datos?Tema=Tecnología" },
-  { nombre: "Turismo", url: "http://200.111.128.26:50888/datos?Tema=Turismo" },
+  { nombre: "Viajes", url: "http://200.111.128.26:50888/datos?Tema=Turismo" },
   { nombre: "Valparaiso", url: "http://200.111.128.26:50888/datos?Tema=Valparaíso" }
 ];
 
