@@ -3,23 +3,26 @@ const logger = require('../src/utils/logger');
 const { insertMasivo } = require('../src/controllers/insertController');
 
 const endpoints = [
-  { nombre: "Antofagasta", url: "http://200.111.128.26:50888/datos?Tema=Antofagasta" },
-  { nombre: "Atacama", url: "http://200.111.128.26:50888/datos?Tema=Atacama" },
-  { nombre: "BioBio", url: "http://200.111.128.26:50888/datos?Tema=Biobío" },
-  { nombre: "Bienestar", url: "http://200.111.128.26:50888/datos?Tema=Bienestar" },
-  { nombre: "CodigoRojo", url: "http://200.111.128.26:50888/datos?Tema=CodigoRojo" },
-  { nombre: "Coquimbo", url: "http://200.111.128.26:50888/datos?Tema=Coquimbo" },
-  { nombre: "Emprendimiento", url: "http://200.111.128.26:50888/datos?Tema=Emprendimiento" },
-  { nombre: "Economía", url: "http://200.111.128.26:50888/datos?Tema=Energía" },
-  { nombre: "Finanzas", url: "http://200.111.128.26:50888/datos?Tema=Finanzas" },
-  { nombre: "Temuco", url: "http://200.111.128.26:50888/datos?Tema=La%20Araucanía" },
-  { nombre: "Magallanes", url: "http://200.111.128.26:50888/datos?Tema=Magallanes" },
-  { nombre: "Minería", url: "http://200.111.128.26:50888/datos?Tema=Minería" },
-  { nombre: "Comercio", url: "http://200.111.128.26:50888/datos?Tema=Retail" },
-  { nombre: "Tecnología", url: "http://200.111.128.26:50888/datos?Tema=Tecnología" },
-  { nombre: "Viajes", url: "http://200.111.128.26:50888/datos?Tema=Turismo" },
-  { nombre: "Valparaiso", url: "http://200.111.128.26:50888/datos?Tema=Valparaíso" }
-];
+    { nombre: "Vibra", url: "http://200.111.128.26:50888/datos?Tema=Deportes" },
+    { nombre: "CodigoRojo", url: "http://200.111.128.26:50888/datos?Tema=C%C3%B3digo%20Rojo" },
+    { nombre: "Neon", url: "http://200.111.128.26:50888/datos?Tema=Cultura%20Online" },
+    { nombre: "Sustentable", url: "http://200.111.128.26:50888/datos?Tema=Sustentabilidad" },
+    { nombre: "Antofagasta", url: "http://200.111.128.26:50888/datos?Tema=Antofagasta" },
+    { nombre: "Atacama", url: "http://200.111.128.26:50888/datos?Tema=Atacama" },
+    { nombre: "BioBio", url: "http://200.111.128.26:50888/datos?Tema=Biobío" },
+    { nombre: "Bienestar", url: "http://200.111.128.26:50888/datos?Tema=Bienestar" },
+    { nombre: "CodigoRojo", url: "http://200.111.128.26:50888/datos?Tema=CodigoRojo" },
+    { nombre: "Coquimbo", url: "http://200.111.128.26:50888/datos?Tema=Coquimbo" },
+    { nombre: "Emprendimiento", url: "http://200.111.128.26:50888/datos?Tema=Emprendimiento" },
+    { nombre: "Energia", url: "http://200.111.128.26:50888/datos?Tema=Energ%C3%ADa " },
+    { nombre: "Finanzas", url: "http://200.111.128.26:50888/datos?Tema=Finanzas" },
+    { nombre: "Temuco", url: "http://200.111.128.26:50888/datos?Tema=La%20Araucanía" },
+    { nombre: "Magallanes", url: "http://200.111.128.26:50888/datos?Tema=Magallanes" },
+    { nombre: "Minería", url: "http://200.111.128.26:50888/datos?Tema=Minería" },
+    { nombre: "Comercio", url: "http://200.111.128.26:50888/datos?Tema=Retail" },
+    { nombre: "Tecnología", url: "http://200.111.128.26:50888/datos?Tema=Tecnología" },
+    { nombre: "Turismo", url: "http://200.111.128.26:50888/datos?Tema=Turismo" },
+  ];
 
 
 const ejecutarMasivoLoop = async () => {

@@ -33,6 +33,10 @@ const insertMasivo= async (tema, url_nota) => {
 
 const testTemas = async (req, res) => {
   const endpoints = [
+    { nombre: "Vibra", url: "http://200.111.128.26:50888/datos?Tema=Deportes" },
+    { nombre: "CodigoRojo", url: "http://200.111.128.26:50888/datos?Tema=C%C3%B3digo%20Rojo" },
+    { nombre: "Neon", url: "http://200.111.128.26:50888/datos?Tema=Cultura%20Online" },
+    { nombre: "Sustentable", url: "http://200.111.128.26:50888/datos?Tema=Sustentabilidad" },
     { nombre: "Antofagasta", url: "http://200.111.128.26:50888/datos?Tema=Antofagasta" },
     { nombre: "Atacama", url: "http://200.111.128.26:50888/datos?Tema=Atacama" },
     { nombre: "BioBio", url: "http://200.111.128.26:50888/datos?Tema=Biobío" },
@@ -48,7 +52,8 @@ const testTemas = async (req, res) => {
     { nombre: "Comercio", url: "http://200.111.128.26:50888/datos?Tema=Retail" },
     { nombre: "Tecnología", url: "http://200.111.128.26:50888/datos?Tema=Tecnología" },
     { nombre: "Turismo", url: "http://200.111.128.26:50888/datos?Tema=Turismo" },
-    { nombre: "Valparaiso", url: "http://200.111.128.26:50888/datos?Tema=Valparaíso" }
+    
+    
   ];
 
   try {
