@@ -33,8 +33,8 @@ class WpApiService {
                 .toBuffer();
 
             const formData = new FormData();
-            formData.append('file', resizedImage, { filename: tituloImagen, contentType: 'image/jpeg' });
-            formData.append('title', tituloImagen);
+            formData.append('file', resizedImage, { filename: `${tituloImagen}.jpg`, contentType: 'image/jpeg' });
+            formData.append('title', `${tituloImagen}.jpg`);
 
             const headers = {
                 'Authorization': `Bearer ${token}`,
@@ -175,58 +175,6 @@ class WpApiService {
         throw error;
     }
 }
-
-
-
-
-    async createPostWithImageRAM(postData, token) {
-        try {
-            const {name, species, status, gender, image} = postData;
-
-            
-
-            
-            const imageId = await this.uploadImageFromURL(image, token, name);
-
-            
-            // const tagIds = [];
-            // for (const tag of ) {
-            //     const tagId = await this.createOrGetTagId(tag, token);
-            //     tagIds.push(tagId);
-            // }
-
-            
-            const response = await axios.post(
-                `${this.siteurl}/wp-json/wp/v2/posts`,
-                {
-                    title: name,
-                    content: `<p>
-                    loremp ipsum dolor sit amet, consectetur adipiscing elit ${name} ${species} ${status} 
-                    loremp ipsum dolor sit amet, consectetur adipiscing elit ${name} ${species} ${status} 
-                    loremp ipsum dolor sit amet, consectetur adipiscing elit ${name} ${species} ${status} 
-                    </p><p><em>Autor: ${name}</em></p>`,
-
-                    excerpt: `
-                    loremp ipsum dolor sit amet, consectetur adipiscing elit ${name} ${species} ${status} 
-                     `, 
-                    status: 'publish',
-                    featured_media: imageId,
-                    date: new Date(),
-                    categories: [1], // Ajusta la categoría si es necesario
-                },
-                {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                }
-            );
-
-            console.log(`Post creado con éxito: ${response.data.id}`);
-            return response.data;
-        } catch (error) {
-            console.error('Error al crear el post con imagen:', error.response?.data || error.message);
-            throw error;
-        }
-    }
-
 
     async getExistingPosts(ids) {
         const { query, release } = await database.connection();
